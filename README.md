@@ -57,8 +57,8 @@ cat > ~/.config/karabiner/assets/complex_modifications/korean_english_fixed_swit
             }
           ],
           "parameters": {
-            "basic.to_if_alone_timeout_milliseconds": 150,
-            "basic.to_if_held_down_threshold_milliseconds": 100
+            "basic.to_if_alone_timeout_milliseconds": 200,
+            "basic.to_if_held_down_threshold_milliseconds": 150
           }
         }
       ]
@@ -89,8 +89,8 @@ cat > ~/.config/karabiner/assets/complex_modifications/korean_english_fixed_swit
             }
           ],
           "parameters": {
-            "basic.to_if_alone_timeout_milliseconds": 150,
-            "basic.to_if_held_down_threshold_milliseconds": 100
+            "basic.to_if_alone_timeout_milliseconds": 200,
+            "basic.to_if_held_down_threshold_milliseconds": 150
           }
         }
       ]
