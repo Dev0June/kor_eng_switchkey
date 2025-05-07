@@ -1,0 +1,57 @@
+{
+  "title": "Caps tap = Ctrl-Space, hold = Caps; ⌥/⌘ 전환",
+  "rules": [
+    {
+      "description": "Caps tap → Ctrl-Space, hold → CapsLock",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "caps_lock",
+                    "modifiers": { "optional": ["any"] } },
+
+          "to_if_alone": [
+            { "key_code": "spacebar", "modifiers": ["left_control"] }
+          ],
+          "to_if_held_down": [
+            { "key_code": "caps_lock" }
+          ],
+          "parameters": { "basic.to_if_held_down_threshold_milliseconds": 300 }
+        }
+      ]
+    },
+    {
+      "description": "Left ⌥ alone → ABC",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "left_option",
+                    "modifiers": { "optional": ["any"] } },
+          "to": [ { "key_code": "left_option", "lazy": true } ],
+          "to_if_alone": [
+            { "select_input_source": { "input_source_id": "com.apple.keylayout.ABC" } }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Left ⌘ alone → 2-Set Korean + Hangul",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "left_command",
+                    "modifiers": { "optional": ["any"] } },
+          "to": [ { "key_code": "left_command", "lazy": true } ],
+          "to_if_alone": [
+            {
+              "select_input_source": {
+                "input_source_id": "com.apple.inputmethod.Korean.2SetKorean",
+                "input_mode_id":   "com.apple.inputmethod.Korean.2SetKorean"
+              }
+            },
+            { "key_code": "spacebar", "modifiers": ["left_control"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

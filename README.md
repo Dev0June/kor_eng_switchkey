@@ -28,70 +28,65 @@ mkdir -p ~/.config/karabiner/assets/complex_modifications
 
 2. 아래 내용으로 설정 파일을 생성합니다:
 ```bash
-cat > ~/.config/karabiner/assets/complex_modifications/korean_english_fixed_switch.json << 'EOF'
+cat > ~/.config/karabiner/assets/complex_modifications/kor_caps_toggle.json << 'EOF'
 {
-  "title": "한글/영문 고정 전환 설정",
+  "title": "Caps tap = Ctrl-Space, hold = Caps; ⌥/⌘ 전환",
   "rules": [
+
+    /* CapsLock: tap -> Ctrl+Space (다음 입력소스), hold -> 원래 Caps */
     {
-      "description": "왼쪽 Command 키 - 한글 전환",
+      "description": "Caps tap → Ctrl-Space, hold → CapsLock",
       "manipulators": [
         {
           "type": "basic",
-          "from": {
-            "key_code": "left_command",
-            "modifiers": {
-              "optional": ["any"]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_command",
-              "lazy": true
-            }
-          ],
+          "from": { "key_code": "caps_lock",
+                    "modifiers": { "optional": ["any"] } },
+
           "to_if_alone": [
-            {
-              "select_input_source": {
-                "input_mode_id": "com.apple.inputmethod.Korean.2SetKorean"
-              }
-            }
+            { "key_code": "spacebar", "modifiers": ["left_control"] }
           ],
-          "parameters": {
-            "basic.to_if_alone_timeout_milliseconds": 200,
-            "basic.to_if_held_down_threshold_milliseconds": 150
-          }
+          "to_if_held_down": [
+            { "key_code": "caps_lock" }
+          ],
+          "parameters": { "basic.to_if_held_down_threshold_milliseconds": 300 }
         }
       ]
     },
+
+    /* 왼 Option 단독 → 영문 */
     {
-      "description": "왼쪽 Option 키 - 영문 전환",
+      "description": "Left ⌥ alone → ABC",
       "manipulators": [
         {
           "type": "basic",
-          "from": {
-            "key_code": "left_option",
-            "modifiers": {
-              "optional": ["any"]
-            }
-          },
-          "to": [
-            {
-              "key_code": "left_option",
-              "lazy": true
-            }
-          ],
+          "from": { "key_code": "left_option",
+                    "modifiers": { "optional": ["any"] } },
+          "to": [ { "key_code": "left_option", "lazy": true } ],
+          "to_if_alone": [
+            { "select_input_source": { "input_source_id": "com.apple.keylayout.ABC" } }
+          ]
+        }
+      ]
+    },
+
+    /* 왼 Command 단독 → 두벌식 + Hangul 고정 */
+    {
+      "description": "Left ⌘ alone → 2-Set Korean + Hangul",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "left_command",
+                    "modifiers": { "optional": ["any"] } },
+          "to": [ { "key_code": "left_command", "lazy": true } ],
           "to_if_alone": [
             {
               "select_input_source": {
-                "language": "en",
-                "input_source_id": "com.apple.keylayout.ABC"
+                "input_source_id": "com.apple.inputmethod.Korean.2SetKorean",
+                "input_mode_id":   "com.apple.inputmethod.Korean.2SetKorean"
               }
-            }
-          ],
-          "parameters": {
-            "basic.to_if_alone_timeout_milliseconds": 200,
-            "basic.to_if_held_down_threshold_milliseconds": 150
-          }
+            },
+            { "key_code": "spacebar", "modifiers": ["left_control"] }   /* 혹시 내부 모드가 A 로 남아 있을 때 대비 */
+          ]
         }
       ]
     }
