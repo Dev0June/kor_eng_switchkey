@@ -28,9 +28,9 @@ mkdir -p ~/.config/karabiner/assets/complex_modifications
 
 2. 아래 내용으로 설정 파일을 생성합니다:
 ```bash
-cat > ~/.config/karabiner/assets/complex_modifications/kor_caps_toggle.json << 'EOF'
+cat > ~/.config/karabiner/assets/complex_modifications/korean_english_fixed_switch.json << 'EOF'
 {
-  "title": "Caps tap = Ctrl-Space, hold = Caps; ⌥/⌘ 전환",
+  "title": "한글/영문 고정 전환 설정",
   "rules": [
 
     /* CapsLock: tap -> Ctrl+Space (다음 입력소스), hold -> 원래 Caps */
@@ -48,7 +48,7 @@ cat > ~/.config/karabiner/assets/complex_modifications/kor_caps_toggle.json << '
           "to_if_held_down": [
             { "key_code": "caps_lock" }
           ],
-          "parameters": { "basic.to_if_held_down_threshold_milliseconds": 300 }
+          "parameters": { "basic.to_if_held_down_threshold_milliseconds": 400 }   /* 탭·홀드 판정 0.4초(300~500 조절) */
         }
       ]
     },
@@ -95,8 +95,9 @@ cat > ~/.config/karabiner/assets/complex_modifications/kor_caps_toggle.json << '
 EOF
 ```
 
-3. Karabiner-Elements 앱을 실행하고 "Complex Modifications" 탭으로 이동합니다.
-4. "Add rule" 버튼을 클릭하고 방금 생성한 "한글/영문 고정 전환 설정" 규칙을 활성화합니다.
+4. 우측 하단(또는 상단)의 **"Add predefined rule"** 버튼(버전에 따라 "Add rule"로 표기)을 클릭해 규칙 목록을 엽니다.  
+   - 만약 목록에 새 규칙이 바로 보이지 않으면, 메뉴 ⚙ 아이콘 → **ReloadXML**(또는 앱 재시작) 후 다시 시도하세요.
+5. 목록에서 "한글/영문 고정 전환 설정" 항목의 **Enable** 버튼을 눌러 규칙을 활성화합니다.
 
 ### 4. 입력 소스 ID 확인 방법
 
@@ -113,11 +114,13 @@ plutil -p ~/Library/Preferences/com.apple.HIToolbox.plist | grep -A 5 "AppleCurr
 # 영문 입력 소스 ID 예시: com.apple.keylayout.ABC
 ```
 
+또는 Karabiner-EventViewer(⌥⇧⌘K) → Variables 패널에서 `input_source_id` 값을 실시간으로 확인할 수도 있습니다.
+
 ### 5. 시스템 설정 확인
 
 1. 시스템 설정 → 키보드 → 텍스트 입력으로 이동합니다.
 2. 한글(2벌식), ABC(영문) 두 가지 입력 소스가 추가되어 있는지 확인합니다.
-3. 언어 전환 단축키 설정은 위 설정에서 직접 전환하므로 크게 중요하지 않습니다.
+3. "다음 입력 소스 선택" 단축키가 Ctrl + Space 로 설정·활성화되어 있는지 확인합니다.
 
 이 설정을 완료하면:
 - 왼쪽 Command 키를 눌렀다 떼면 항상 한글로 전환
@@ -150,4 +153,15 @@ brew uninstall --cask karabiner-elements
 1. 시스템 설정 → 키보드 → 단축키 → 입력 소스로 이동합니다.
 2. "이전 입력 소스 선택" 단축키를 기본값 또는 원하는 값으로 재설정합니다.
 
-위 과정을 완료하면 키보드 설정이 원래 상태로 복원됩니다. 
+위 과정을 완료하면 키보드 설정이 원래 상태로 복원됩니다.
+
+## 자주 묻는 질문(FAQ)
+
+**Q1. Caps Lock 탭이 한/영 전환이 아니라 대문자 고정만 됩니다.**  
+A. macOS 키보드 단축키에서 "다음 입력 소스 선택"이 Ctrl + Space 로 켜져 있는지, Karabiner-Elements 에 충분한 권한(입력 모니터링, 접근성)이 부여되어 있는지 먼저 확인하세요.
+
+**Q2. 왼쪽 ⌘ 단독을 눌러도 계속 'A' 모드(영문)가 나옵니다.**  
+A. EventViewer 로 `input_source_id` 가 올바르게 전송되는지 확인하시고, JSON 안의 `input_source_id` / `input_mode_id` 값을 자신의 Mac 에서 조회한 실제 값으로 바꿔 주세요.
+
+**Q3. 키가 두 번 눌리거나 잘못 인식됩니다.**  
+A. `"basic.to_if_held_down_threshold_milliseconds"` 값을 400 → 500 정도로 늘리거나, 시스템 키보드 반응 속도를 '느리게' 로 조정해 보세요. 
